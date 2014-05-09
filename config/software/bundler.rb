@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
+# Copyright:: Copyright (c) 2012-2014 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,9 +16,13 @@
 #
 
 name "bundler"
-version "1.1.5"
+default_version "1.5.3"
 
-dependency "rubygems" unless platform == 'windows'
+if platform == 'windows'
+  dependency "ruby-windows"
+else
+  dependency "rubygems"
+end
 
 build do
   gem "install bundler --no-rdoc --no-ri -v '#{version}'"

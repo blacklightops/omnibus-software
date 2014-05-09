@@ -1,5 +1,5 @@
 #
-# Copyright:: Copyright (c) 2012 Opscode, Inc.
+# Copyright:: Copyright (c) 2012-2014 Chef Software, Inc.
 # License:: Apache License, Version 2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,12 +16,32 @@
 #
 
 name "berkshelf"
-version "2.0.12"
+default_version "master"
 
-dependency "ruby"
-dependency "rubygems"
+source :git => "git://github.com/berkshelf/berkshelf"
+
+relative_path "berkshelf"
+
+if platform == 'windows'
+  dependency "ruby-windows"
+  dependency "ruby-windows-devkit"
+else
+  dependency "libffi"
+  dependency "ruby"
+  dependency "rubygems"
+  dependency "libarchive"
+end
+
 dependency "nokogiri"
+dependency "bundler"
+dependency "dep-selector-libgecode"
 
 build do
-  gem "install #{name} -n #{install_dir}/bin --no-rdoc --no-ri -v #{version}"
+  # determine correct path variable for windows, can be PATH or Path
+  path_key = ENV.keys.grep(/\Apath\Z/i).first
+
+  bundle "install --without guard", :env => {path_key => path_with_embedded }
+  bundle "exec thor gem:build", :env => {path_key => path_with_embedded }
+  gem ["install pkg/berkshelf-*.gem",
+       "--no-rdoc --no-ri"].join(" "), :env => {path_key => path_with_embedded }
 end
