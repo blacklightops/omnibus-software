@@ -1,0 +1,16 @@
+diff --git a/lib/sensu/server.rb b/lib/sensu/server.rb
+index 50bc323..7fdc518 100644
+--- a/lib/sensu/server.rb
++++ b/lib/sensu/server.rb
+@@ -470,6 +470,11 @@ module Sensu
+		     :output => check[:output],
+		     :status => check[:status],
+		     :issued => check[:issued],
++                    :check_parameters => {
++                      :refresh => check[:refresh] ? check[:refresh] : nil,
++                      :occurrences => check[:occurrences] ? check[:occurrences] : nil,
++                      :dependencies => check[:dependencies] ? check[:dependencies] : nil
++                    },
+		     :handlers => Array((check[:handlers] || check[:handler]) || 'default'),
+		     :flapping => is_flapping,
+		     :occurrences => event[:occurrences]

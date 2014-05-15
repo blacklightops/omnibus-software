@@ -1,0 +1,41 @@
+diff --git lib/sensu/client.rb lib/sensu/client.rb
+index 2d9d283..f60c469 100644
+--- lib/sensu/client.rb
++++ lib/sensu/client.rb
+@@ -157,8 +157,8 @@ module Sensu
+	 :check => check
+       })
+       check[:executed] = Time.now.to_i
+-      extension = @extensions[:checks][check[:name]]
+-      extension.safe_run do |output, status|
++      extension = @extensions[:checks][check[:extension]]
++      extension.safe_run(check) do |output, status|
+	 check[:output] = output
+	 check[:status] = status
+	 publish_result(check)
+@@ -182,8 +182,8 @@ module Sensu
+	 else
+	   execute_check_command(check)
+	 end
+-      else
+-        if @extensions.check_exists?(check[:name])
++      elsif check.has_key?(:extension)
++        if @extensions.check_exists?(check[:extension])
+	   run_check_extension(check)
+	 else
+	   @logger.warn('unknown check extension', {
+diff --git lib/sensu/settings.rb lib/sensu/settings.rb
+index 4b37182..be00395 100644
+--- lib/sensu/settings.rb
++++ lib/sensu/settings.rb
+@@ -217,8 +217,8 @@ module Sensu
+       unless (check[:interval].is_a?(Integer) && check[:interval] > 0) || !check[:publish]
+	 invalid_check(check, 'check is missing interval')
+       end
+-      unless check[:command].is_a?(String)
+-        invalid_check(check, 'check is missing command')
++      unless (check[:command].is_a?(String) ^ check[:extension].is_a?(String))
++        invalid_check(check, 'check configuration is invalid command xor extension')
+       end
+       if check.has_key?(:standalone)
+	 unless !!check[:standalone] == check[:standalone]
