@@ -39,6 +39,7 @@ relative_path "openssl-#{version}"
 
 build do
   patch :source => "openssl-1.0.1g-do-not-build-docs.patch"
+  patch :source => "openssl-1.0.1g-fix-build-error.patch"
 
   env = case platform
         when "mac_os_x"
