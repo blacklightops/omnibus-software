@@ -30,16 +30,15 @@ if platform == "aix"
   source :url => "http://www.openssl.org/source/openssl-1.0.1c.tar.gz",
          :md5 => "ae412727c8c15b67880aef7bd2999b2e"
 else
-  default_version "1.0.1g"
-  source :url => "/vagrant_data/openssl-1.0.1g-bl.tar.gz",
-         :md5 => "c0bb02eab911ded4c90c96de2b368000"
+  default_version "1.0.1f"
+  source :url => "http://www.openssl.org/source/openssl-1.0.1f.tar.gz",
+	 :md5 => "f26b09c028a0541cab33da697d522b25"
 end
 
 relative_path "openssl-#{version}"
 
 build do
-  patch :source => "openssl-1.0.1g-do-not-build-docs.patch"
-  patch :source => "openssl-1.0.1g-fix-build-error.patch"
+  patch :source => "openssl-1.0.1f-do-not-build-docs.patch"
 
   env = case platform
         when "mac_os_x"
