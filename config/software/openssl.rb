@@ -31,8 +31,8 @@ if platform == "aix"
          :md5 => "ae412727c8c15b67880aef7bd2999b2e"
 else
   default_version "1.0.1g"
-  source :url => "http://www.openssl.org/source/openssl-1.0.1g.tar.gz",
-         :md5 => "de62b43dfcd858e66a74bee1c834e959"
+  source :url => "/vagrant_data/openssl-1.0.1g-bl.tar.gz",
+         :md5 => "c0bb02eab911ded4c90c96de2b368000"
 end
 
 relative_path "openssl-#{version}"
